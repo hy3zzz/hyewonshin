@@ -1,0 +1,742 @@
+/* ============================================
+   ALVAR AALTO — DESIGN TOKENS
+
+   Finnish modernism: warm, organic, humanistic.
+   Not cold Swiss grid — structural but breathing.
+   Birch paper, warm amber, natural grain.
+   ============================================ */
+:root {
+  --bg:        #ffffff;
+  --bg-2:      #f4f4f4;
+  --black:     #0f0f0f;
+  --gray:      #6a6a6a;
+  --muted:     #b0b0b0;
+  --line:      #e0e0e0;
+  --accent:    #0f0f0f;   /* spine = black */
+  --accent-lt: #c8c8c8;   /* light spine */
+  --white:     #ffffff;
+
+  --sans:      'SUIT Variable', sans-serif;
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --col-label: 88px;
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--black);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ============================================
+   GRID SYSTEM
+
+   Every section uses the same column spine:
+   var(--col-label) as col-1.
+   The col-1 right border uses --accent (amber)
+   — a single warm vertical line running the
+   full height of the page. Aalto's golden rod.
+   ============================================ */
+.g {
+  display: grid;
+  border-bottom: 1px solid var(--line);
+}
+.g-3 { grid-template-columns: var(--col-label) 1fr 1fr; }
+.g-2 { grid-template-columns: var(--col-label) 1fr; }
+
+.gc {
+  border-right: 1px solid var(--line);
+  padding: 40px 32px;
+}
+.gc:last-child { border-right: none; }
+
+/* Label column — amber right border = the spine */
+.gc--label {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-right: 1px solid var(--accent-lt);  /* golden spine */
+}
+
+/* ============================================
+   TYPOGRAPHY SCALE
+   ============================================ */
+.t-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   NAVIGATION
+   The logo cell is exactly var(--col-label)
+   wide — its amber right border aligns with
+   every section's golden spine below.
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: var(--col-label) 1fr auto;
+  height: 52px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid var(--accent-lt);  /* continues the amber spine */
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--black);
+}
+
+.nav-center {
+  border-right: 1px solid var(--line);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-links li { height: 100%; display: flex; }
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.nav-links a:hover { color: var(--black); }
+
+.nav-links a.active {
+  background: var(--black);
+  color: var(--white);
+  border-left-color: var(--black);
+}
+
+/* ============================================
+   PAGE SYSTEM
+   ============================================ */
+.page {
+  display: none;
+  padding-top: 52px;
+  min-height: 100vh;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.page.active {
+  display: block;
+  animation: pageIn 0.5s var(--ease-out) both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   HOME — HERO
+   ============================================ */
+.hero-grid {
+  grid-template-columns: var(--col-label) 1fr 1fr;
+  min-height: 400px;
+}
+
+.hero-label {
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--accent-lt);  /* amber spine */
+}
+
+.hero-label-idx {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--accent-lt);
+  letter-spacing: 0.06em;
+}
+
+.hero-label-role {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.hero-name-cell {
+  grid-column: 2 / 4;
+  padding: 56px 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: none;
+}
+
+.display-name {
+  font-size: clamp(80px, 12vw, 160px);
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--black);
+}
+
+.en-line { margin-top: 10px; }
+
+.display-name .en {
+  display: block;
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 200;
+  color: var(--muted);
+  letter-spacing: -0.03em;
+}
+
+.hero-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 40px;
+  margin-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-tagline {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--black);
+}
+
+.hero-tagline-sub {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  text-align: right;
+}
+
+.stat-num {
+  font-size: 36px;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--black);
+  display: block;
+}
+
+.stat-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
+/* ============================================
+   HOME — PROJECTS
+   ============================================ */
+.projects-header {
+  grid-template-columns: var(--col-label) 1fr 1fr;
+  border-bottom: none;
+}
+
+.projects-header-label {
+  padding: 18px 20px;
+  border-right: 1px solid var(--accent-lt);
+}
+
+.projects-header-col {
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col-num {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--line);
+  letter-spacing: 0.05em;
+}
+
+.project-row {
+  grid-template-columns: var(--col-label) 1fr 1fr;
+}
+
+.project-row-label {
+  padding: 0;
+  border-right: 1px solid var(--accent-lt);
+}
+
+.project-row-cell {
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  transition: background 0.3s var(--ease);
+}
+
+.project-row-cell:hover { background: var(--bg-2); }
+
+.project-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+.project-row-cell:nth-child(2) .project-thumb { background: #ebebeb; }
+.project-row-cell:nth-child(3) .project-thumb { background: #e4e4e4; }
+.project-row > .project-row-cell:first-of-type .project-thumb { background: #ebebeb; }
+
+.project-thumb img {
+  transition: transform 0.7s var(--ease-out);
+}
+.project-row-cell:hover .project-thumb img { transform: scale(1.03); }
+
+.thumb-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.project-row-cell:hover .project-thumb::after { opacity: 0.05; }
+
+.project-info {
+  padding: 22px 32px 26px;
+}
+
+.project-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.project-cat {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project-yr {
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--line);
+  letter-spacing: 0.04em;
+}
+
+.project-title {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--black);
+  margin-bottom: 14px;
+  transition: color 0.2s;
+}
+.project-row-cell:hover .project-title { color: var(--gray); }
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-tag {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 3px 9px;
+  text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s;
+}
+.project-row-cell:hover .project-tag {
+  border-color: var(--gray);
+  color: var(--gray);
+}
+
+.project-row-empty {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.03) 10px,
+    rgba(0, 0, 0, 0.03) 11px
+  );
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  display: grid;
+  grid-template-columns: var(--col-label) 1fr auto;
+  border-top: 1px solid var(--line);
+  height: 48px;
+}
+
+footer > div {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+footer > div:first-child {
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+footer > div:last-child { border-right: none; }
+
+/* ============================================
+   ABOUT PAGE
+   ============================================ */
+.about-header {
+  grid-template-columns: var(--col-label) 1fr;
+  min-height: 220px;
+}
+
+.about-header-label {
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-right: 1px solid var(--accent-lt);
+}
+
+.about-header-content {
+  padding: 56px 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.page-headline {
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--black);
+}
+
+.about-body {
+  grid-template-columns: var(--col-label) 1fr 320px;
+}
+
+.about-body-spacer { padding: 0; }
+
+.about-bio {
+  padding: 52px 56px;
+}
+
+.about-bio p {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--black);
+  margin-bottom: 22px;
+}
+
+.about-bio p.muted {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray);
+}
+
+.about-sidebar {
+  padding: 40px 32px;
+}
+
+.sidebar-block {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--line);
+}
+.sidebar-block:last-child {
+  margin-bottom: 0; padding-bottom: 0; border-bottom: none;
+}
+
+.sidebar-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.exp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.exp-row:last-child { border-bottom: 1px solid var(--line); }
+
+.exp-name {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--black);
+}
+
+.exp-period {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.skill-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-chip {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  border: 1px solid var(--line);
+  padding: 5px 11px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  cursor: default;
+}
+.skill-chip:hover {
+  color: var(--black);
+  border-color: var(--gray);
+  background: var(--bg-2);
+}
+
+/* ============================================
+   INFO PAGE
+   ============================================ */
+.info-header {
+  grid-template-columns: var(--col-label) 1fr;
+  min-height: 220px;
+}
+
+.info-body {
+  grid-template-columns: var(--col-label) 1fr 1fr;
+  border-bottom: none;
+}
+
+.info-cell { padding: 52px 48px; }
+
+.info-block-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.info-email {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  display: block;
+  margin-bottom: 20px;
+  width: fit-content;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.info-email:hover { color: var(--gray); border-color: var(--gray); }
+
+.info-note {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--gray);
+  max-width: 300px;
+}
+
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  transition: border-color 0.2s;
+}
+.availability:hover { border-color: var(--gray); }
+
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #4caf4c;
+  flex-shrink: 0;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--black);
+  transition: color 0.2s, padding-left 0.25s var(--ease-out);
+}
+.link-item:last-child { border-bottom: 1px solid var(--line); }
+.link-item:hover { color: var(--gray); padding-left: 6px; }
+
+.link-arrow {
+  font-size: 11px;
+  color: var(--muted);
+  transition: color 0.2s, transform 0.25s var(--ease-out);
+}
+.link-item:hover .link-arrow { color: var(--gray); transform: translate(3px, -3px); }
+
+/* ============================================
+   ANIMATION SYSTEM
+
+   1. .line  — overflow:hidden wrapper.
+      Direct child <span> slides up from 110%.
+   2. .fu    — fade-up (opacity + translateY).
+
+   Delays: .d0–.d7  (80ms increments)
+   Fire when parent .page gains .active.
+   JS resets per page switch.
+   ============================================ */
+@keyframes lineReveal {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.line { display: block; overflow: hidden; }
+.line > span { display: block; transform: translateY(110%); }
+.page.active .line > span {
+  animation: lineReveal 1s var(--ease-out) forwards;
+}
+
+.fu { opacity: 0; transform: translateY(18px); }
+.page.active .fu {
+  animation: fadeUp 0.9s var(--ease-out) forwards;
+}
+
+.d0 { animation-delay: 0ms; }
+.d1 { animation-delay: 80ms; }
+.d2 { animation-delay: 160ms; }
+.d3 { animation-delay: 260ms; }
+.d4 { animation-delay: 360ms; }
+.d5 { animation-delay: 480ms; }
+.d6 { animation-delay: 580ms; }
+.d7 { animation-delay: 680ms; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 860px) {
+  :root { --col-label: 0px; }
+
+  .hero-label,
+  .about-header-label,
+  .gc--label,
+  .projects-header-label,
+  .project-row-label,
+  .about-body-spacer,
+  .info-body .gc--label,
+  footer > div:first-child,
+  .nav-center { display: none; }
+
+  nav { grid-template-columns: 1fr auto; }
+  .nav-logo { border-right: none; }
+
+  .g-3, .project-row, .projects-header,
+  .about-body, .info-body { grid-template-columns: 1fr; }
+
+  .hero-name-cell { padding: 36px 24px 32px; }
+  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .about-bio { padding: 36px 24px; }
+  .about-sidebar { padding: 32px 24px; border-top: 1px solid var(--line); }
+  .info-cell { padding: 36px 24px; }
+  .about-header-content, .hero-name-cell { padding-left: 24px; padding-right: 24px; }
+
+  .page { border-left: none; border-right: none; }
+  footer { grid-template-columns: 1fr auto; }
+}

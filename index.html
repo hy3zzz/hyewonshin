@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>신혜원 — Product Designer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" />
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#" onclick="showPage('home'); return false;">신혜원</a>
+    <div class="nav-center"></div>
+    <ul class="nav-links">
+      <li><a href="#" id="nav-home"  class="active" onclick="showPage('home');  return false;">Home</a></li>
+      <li><a href="#" id="nav-about"             onclick="showPage('about'); return false;">About</a></li>
+      <li><a href="#" id="nav-info"              onclick="showPage('info');  return false;">Info</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ==========================================
+       PAGE: HOME
+       ========================================== -->
+  <div id="page-home" class="page active">
+
+    <!-- HERO ROW -->
+    <div class="g hero-grid">
+
+      <div class="gc hero-label">
+        <!-- 라벨은 fade-up으로 -->
+        <span class="hero-label-idx fu d0">00</span>
+        <span class="hero-label-role fu d1" id="c-role">Product Designer</span>
+      </div>
+
+      <div class="gc hero-name-cell">
+        <h1 class="display-name">
+          <span class="line"><span class="d1" id="c-nameKr">신혜원</span></span>
+          <span class="line en-line"><span class="en d2" id="c-nameEn">Shin Hyewon</span></span>
+        </h1>
+
+        <div class="hero-bottom">
+          <div>
+            <p class="hero-tagline fu d3" id="c-tagline">좋은 경험은 설명이 필요 없습니다.</p>
+            <p class="hero-tagline-sub fu d4" id="c-taglineSub">Good design needs no explanation.</p>
+          </div>
+          <div class="hero-stats fu d4">
+            <div>
+              <span class="stat-num" id="c-years">3+</span>
+              <span class="stat-label">Years</span>
+            </div>
+            <div>
+              <span class="stat-num" id="c-projectCount">20+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PROJECTS HEADER -->
+    <div class="g g-3 projects-header fu d5">
+      <div class="gc gc--label projects-header-label">
+        <span class="t-label">Work</span>
+      </div>
+      <div class="gc projects-header-col">
+        <span class="t-label">Selected Work</span>
+        <span class="col-num">01 — 02</span>
+      </div>
+      <div class="gc projects-header-col">
+        <span class="t-label">&nbsp;</span>
+        <span class="col-num">2023 – 2024</span>
+      </div>
+    </div>
+
+    <!-- PROJECT ROW 1 -->
+    <div class="g g-3 project-row">
+      <div class="gc gc--label project-row-label"></div>
+
+      <!-- ▸ PROJECT 01
+           수정: project-cat / project-title / project-yr / project-tag
+           이미지: thumb-placeholder → <img src="assets/p1.jpg" alt="…"> -->
+      <div class="gc project-row-cell fu d5">
+        <div class="project-thumb">
+          <!-- <img src="assets/project1.jpg" alt="프로젝트 이름" /> -->
+          <div class="thumb-placeholder">01</div>
+        </div>
+        <div class="project-info">
+          <div class="project-meta-row">
+            <span class="project-cat">Digital Product</span>
+            <span class="project-yr">2024</span>
+          </div>
+          <h2 class="project-title">프로젝트 이름을 입력하세요</h2>
+          <div class="project-tags">
+            <span class="project-tag">UX Design</span>
+            <span class="project-tag">Prototyping</span>
+            <span class="project-tag">Figma</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ PROJECT 02 -->
+      <div class="gc project-row-cell fu d6">
+        <div class="project-thumb">
+          <!-- <img src="assets/project2.jpg" alt="프로젝트 이름" /> -->
+          <div class="thumb-placeholder">02</div>
+        </div>
+        <div class="project-info">
+          <div class="project-meta-row">
+            <span class="project-cat">Brand Experience</span>
+            <span class="project-yr">2024</span>
+          </div>
+          <h2 class="project-title">프로젝트 이름을 입력하세요</h2>
+          <div class="project-tags">
+            <span class="project-tag">Visual Design</span>
+            <span class="project-tag">Branding</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT ROW 2
+         프로젝트 추가: .project-row-empty 를 project-row-cell 로 교체
+         추가 프로젝트 더 넣으려면 project-row 블록 전체 복사 -->
+    <div class="g g-3 project-row">
+      <div class="gc gc--label project-row-label"></div>
+
+      <!-- ▸ PROJECT 03 -->
+      <div class="gc project-row-cell fu d7">
+        <div class="project-thumb">
+          <!-- <img src="assets/project3.jpg" alt="프로젝트 이름" /> -->
+          <div class="thumb-placeholder">03</div>
+        </div>
+        <div class="project-info">
+          <div class="project-meta-row">
+            <span class="project-cat">Mobile App</span>
+            <span class="project-yr">2023</span>
+          </div>
+          <h2 class="project-title">프로젝트 이름을 입력하세요</h2>
+          <div class="project-tags">
+            <span class="project-tag">UI Design</span>
+            <span class="project-tag">User Research</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gc project-row-empty fu d7"></div>
+    </div>
+
+    <footer>
+      <div>HW</div>
+      <div>© 2025 신혜원</div>
+      <div>Seoul, Korea</div>
+    </footer>
+
+  </div><!-- /page-home -->
+
+
+  <!-- ==========================================
+       PAGE: ABOUT
+       ========================================== -->
+  <div id="page-about" class="page">
+
+    <div class="g g-2 about-header">
+      <div class="gc gc--label about-header-label">
+        <span class="t-label fu d0">About</span>
+      </div>
+      <div class="gc about-header-content">
+        <h1 class="page-headline">
+          <span class="line"><span class="d1" id="c-about-h1">경험을 설계하는</span></span>
+          <span class="line"><span class="d2" id="c-about-h2">디자이너입니다.</span></span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="g about-body">
+      <div class="gc about-body-spacer"></div>
+
+      <div class="gc about-bio fu d3">
+        <p id="c-about-bio1">안녕하세요, 사용자 경험과 인터페이스 디자인을 중심으로 활동하는 프로덕트 디자이너 신혜원입니다.</p>
+        <p id="c-about-bio2">복잡한 문제를 단순하고 직관적인 경험으로 풀어내는 것에 가장 큰 보람을 느낍니다. 사용자의 행동과 맥락을 깊이 이해하고, 그것을 디자인 언어로 옮기는 과정을 즐깁니다.</p>
+        <p class="muted" id="c-about-bio3">I'm a product designer based in Seoul, focused on crafting simple and meaningful digital experiences.</p>
+      </div>
+
+      <div class="about-sidebar fu d4">
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Experience</p>
+          <div id="c-experience">
+            <div class="exp-row"><span class="exp-name">회사명</span><span class="exp-period">2023 — Present</span></div>
+            <div class="exp-row"><span class="exp-name">회사명</span><span class="exp-period">2021 — 2023</span></div>
+            <div class="exp-row"><span class="exp-name">회사명</span><span class="exp-period">2019 — 2021</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Education</p>
+          <div id="c-education">
+            <div class="exp-row"><span class="exp-name">학교명</span><span class="exp-period">20XX — 20XX</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Skills</p>
+          <div class="skill-wrap" id="c-skills">
+            <span class="skill-chip">Figma</span>
+            <span class="skill-chip">Framer</span>
+            <span class="skill-chip">After Effects</span>
+            <span class="skill-chip">Prototyping</span>
+            <span class="skill-chip">Design System</span>
+            <span class="skill-chip">User Research</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      <div>HW</div>
+      <div>© 2025 신혜원</div>
+      <div>Product Designer</div>
+    </footer>
+
+  </div><!-- /page-about -->
+
+
+  <!-- ==========================================
+       PAGE: INFO
+       ========================================== -->
+  <div id="page-info" class="page">
+
+    <div class="g g-2 info-header">
+      <div class="gc gc--label about-header-label">
+        <span class="t-label fu d0">Info</span>
+      </div>
+      <div class="gc about-header-content">
+        <h1 class="page-headline">
+          <span class="line"><span class="d1">Get in touch.</span></span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="g info-body">
+      <div class="gc gc--label"></div>
+
+      <!-- 연락처 ↓ 이메일을 수정하세요 -->
+      <div class="gc info-cell fu d2">
+        <p class="info-block-label">Contact</p>
+        <a class="info-email" id="c-email" href="mailto:your@email.com">your@email.com</a>
+        <p class="info-note" id="c-info-note">업무 문의 및 협업 제안을 환영합니다.<br>Open to full-time and freelance work.</p>
+        <div class="availability" id="c-availability">
+          <span class="dot"></span>
+          Available for new projects
+        </div>
+      </div>
+
+      <!-- 링크 ↓ href를 본인 링크로 수정하세요 -->
+      <div class="gc info-cell fu d3">
+        <p class="info-block-label">Links</p>
+        <div id="c-links">
+          <a class="link-item" href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn <span class="link-arrow">↗</span></a>
+          <a class="link-item" href="https://behance.net/yourprofile" target="_blank">Behance <span class="link-arrow">↗</span></a>
+          <a class="link-item" href="https://github.com/yourprofile" target="_blank">GitHub <span class="link-arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>HW</div>
+      <div>© 2025 신혜원</div>
+      <div>Seoul, Korea</div>
+    </footer>
+
+  </div><!-- /page-info -->
+
+
+  <script>
+    // ================================================================
+    //  SITE_DATA  ←  GitHub Pages에 배포되는 실제 콘텐츠
+    //  admin.html에서 편집 후 "Export" → 이 객체를 교체하고 push
+    // ================================================================
+    const SITE_DATA = {
+      hero: {
+        nameKr:       '신혜원',
+        nameEn:       'Shin Hyewon',
+        role:         'Product Designer',
+        location:     'Seoul, Korea',
+        tagline:      '좋은 경험은 설명이 필요 없습니다.',
+        taglineSub:   'Good design needs no explanation.',
+        years:        '3+',
+        projectCount: '10+'
+      },
+      projects: [
+        {
+          category: 'Mobile App · AI Service',
+          title:    '헤이링 홈 리디자인',
+          year:     '2024',
+          tags:     'UX Research, Usability Testing, UI Design',
+          image:    ''
+        },
+        {
+          category: 'AI Service · Interaction Design',
+          title:    '레이턴시를 경험으로 — 헤이링',
+          year:     '2025',
+          tags:     'Interaction Design, AI UX, User Research',
+          image:    ''
+        },
+        {
+          category: 'Digital Product',
+          title:    '바비톡 카테고리 탭 개편',
+          year:     '2026',
+          tags:     'UX Research, UI Design, Usability Testing',
+          image:    ''
+        }
+      ],
+      about: {
+        headline1: '기능보다 관계를,',
+        headline2: '경험을 설계합니다.',
+        bio1: '데이터로 문제를 발견하고, 사용자 인터뷰로 본질을 재정의하는 프로덕트 디자이너 신혜원입니다.',
+        bio2: '기술적 한계도 경험의 언어로 번역합니다. 헤이링에서 레이턴시를 UX로 극복해 세션타임을 58% 끌어올렸고, 홈 개편으로 이탈률을 20%p 낮췄습니다. HTML/CSS/JS와 React를 직접 다루며 디자인이 구현까지 이어지는 전 과정을 책임집니다.',
+        bio3: "I'm a product designer in Seoul who turns technical constraints into meaningful experiences — grounded in user research and fluent in code.",
+        experience: [
+          { name: '바비톡', period: '2026.01 — Present' },
+          { name: '헤이링 인턴', period: '2025.07 — 2025.09' },
+          { name: '헤이링 계약직', period: '2024.11 — 2025.01' }
+        ],
+        education: [
+          { name: '시각디자인 전공', period: '20XX — 20XX' },
+          { name: '알토대학교 교환학생', period: '20XX' }
+        ],
+        skills: 'Figma, User Research, Usability Testing, Interaction Design, HTML/CSS/JS, React.js, AI Prompt Design, Figma Plugin Dev'
+      },
+      info: {
+        email:     'hyewon.shin01@gmail.com',
+        note:      '업무 문의 및 협업 제안을 환영합니다.\nOpen to full-time and freelance work.',
+        available: true,
+        links: [
+          { label: 'LinkedIn', url: 'https://www.linkedin.com/in/hyezzz/' }
+        ]
+      }
+    };
+
+    // ================================================================
+    //  로컬에서 admin.html로 편집 중이면 localStorage가 우선
+    //  GitHub Pages 방문자는 항상 SITE_DATA를 봄
+    // ================================================================
+    const _local = localStorage.getItem('portfolio-data');
+    const DATA = _local ? JSON.parse(_local) : SITE_DATA;
+    applyData(DATA);
+
+    // ─── PAGE SWITCH ─────────────────────────────────────────────────
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const newPage = document.getElementById('page-' + name);
+      newPage.querySelectorAll('.line > span, .fu').forEach(el => {
+        el.style.animation = 'none';
+        el.offsetHeight;
+        el.style.animation = '';
+      });
+      newPage.classList.add('active');
+      document.getElementById('nav-' + name).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    // ─── RENDER ──────────────────────────────────────────────────────
+    function applyData(d) {
+      if (!d) return;
+      const h = d.hero;
+      if (h) {
+        setText('c-nameKr',       h.nameKr);
+        setText('c-nameEn',       h.nameEn);
+        setText('c-role',         h.role);
+        setText('c-tagline',      h.tagline);
+        setText('c-taglineSub',   h.taglineSub);
+        setText('c-years',        h.years);
+        setText('c-projectCount', h.projectCount);
+      }
+      if (d.projects) renderProjects(d.projects);
+      if (d.about)    applyAbout(d.about);
+      if (d.info)     applyInfo(d.info);
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el && val !== undefined) el.textContent = val;
+    }
+
+    function renderProjects(projects) {
+      document.querySelectorAll('.project-row').forEach(r => r.remove());
+      const header = document.querySelector('.projects-header');
+      const delays = ['d5','d6','d7','d7','d7','d7'];
+
+      for (let i = 0; i < projects.length; i += 2) {
+        const row = document.createElement('div');
+        row.className = 'g g-3 project-row';
+        const label = document.createElement('div');
+        label.className = 'gc gc--label project-row-label';
+        row.appendChild(label);
+        row.appendChild(buildProjectCell(projects[i],   delays[i]   || 'd7'));
+        if (projects[i + 1]) {
+          row.appendChild(buildProjectCell(projects[i+1], delays[i+1] || 'd7'));
+        } else {
+          const empty = document.createElement('div');
+          empty.className = 'gc project-row-empty fu ' + (delays[i] || 'd7');
+          row.appendChild(empty);
+        }
+        header.insertAdjacentElement('afterend', row);
+      }
+    }
+
+    function buildProjectCell(p, delay) {
+      const tags = (p.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+      const num  = String(tags.length).padStart(2, '0');
+      const cell = document.createElement('div');
+      cell.className = `gc project-row-cell fu ${delay}`;
+      cell.innerHTML = `
+        <div class="project-thumb">
+          ${p.image
+            ? `<img src="${p.image}" alt="${p.title}" />`
+            : `<div class="thumb-placeholder">${num}</div>`}
+        </div>
+        <div class="project-info">
+          <div class="project-meta-row">
+            <span class="project-cat">${p.category || ''}</span>
+            <span class="project-yr">${p.year || ''}</span>
+          </div>
+          <h2 class="project-title">${p.title || ''}</h2>
+          <div class="project-tags">
+            ${tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
+          </div>
+        </div>`;
+      return cell;
+    }
+
+    function applyAbout(a) {
+      setText('c-about-h1',   a.headline1);
+      setText('c-about-h2',   a.headline2);
+      setText('c-about-bio1', a.bio1);
+      setText('c-about-bio2', a.bio2);
+      setText('c-about-bio3', a.bio3);
+      if (a.experience) {
+        document.getElementById('c-experience').innerHTML =
+          a.experience.map(e => `<div class="exp-row"><span class="exp-name">${e.name}</span><span class="exp-period">${e.period}</span></div>`).join('');
+      }
+      if (a.education) {
+        document.getElementById('c-education').innerHTML =
+          a.education.map(e => `<div class="exp-row"><span class="exp-name">${e.name}</span><span class="exp-period">${e.period}</span></div>`).join('');
+      }
+      if (a.skills) {
+        document.getElementById('c-skills').innerHTML =
+          a.skills.split(',').map(s => s.trim()).filter(Boolean)
+            .map(s => `<span class="skill-chip">${s}</span>`).join('');
+      }
+    }
+
+    function applyInfo(info) {
+      const emailEl = document.getElementById('c-email');
+      if (emailEl && info.email) {
+        emailEl.textContent = info.email;
+        emailEl.href = 'mailto:' + info.email;
+      }
+      const noteEl = document.getElementById('c-info-note');
+      if (noteEl && info.note) noteEl.innerHTML = info.note.replace(/\n/g, '<br>');
+      const badge = document.getElementById('c-availability');
+      if (badge) badge.style.display = info.available === false ? 'none' : 'inline-flex';
+      if (info.links) {
+        document.getElementById('c-links').innerHTML =
+          info.links.map(l => `<a class="link-item" href="${l.url}" target="_blank">${l.label} <span class="link-arrow">↗</span></a>`).join('');
+      }
+    }
+  </script>
+
+</body>
+</html>
