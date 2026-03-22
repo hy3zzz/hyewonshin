@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Editor — 신혜원</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #ffffff;
+      --surface: #f7f7f7;
+      --border:  #e8e8e8;
+      --black:   #0f0f0f;
+      --gray:    #6a6a6a;
+      --muted:   #b0b0b0;
+      --accent:  #0f0f0f;
+      --sans:    'SUIT Variable', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--black);
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      grid-template-rows: 52px 1fr;
+      height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px 0 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--black);
+      color: #fff;
+    }
+
+    .topbar-logo {
+      padding: 0 20px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      width: 200px;
+    }
+
+    .topbar-title {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      padding-left: 24px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: var(--black);
+    }
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+    .save-status {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.04em;
+      min-width: 80px;
+      text-align: right;
+      transition: opacity 0.3s;
+    }
+
+    /* ── EXPORT MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--bg);
+      width: 680px;
+      max-width: 95vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .modal-title { font-size: 15px; font-weight: 500; }
+
+    .modal-close {
+      background: none; border: none;
+      font-size: 20px; color: var(--muted);
+      cursor: pointer; line-height: 1;
+    }
+    .modal-close:hover { color: var(--black); }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-instruction {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .modal-instruction strong { color: var(--black); font-weight: 600; }
+
+    .modal-steps {
+      list-style: none;
+      counter-reset: steps;
+      margin-bottom: 20px;
+    }
+    .modal-steps li {
+      counter-increment: steps;
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    .modal-steps li::before {
+      content: counter(steps);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--black);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .modal-code {
+      width: 100%;
+      height: 200px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--black);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      resize: none;
+      outline: none;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn-copy {
+      background: var(--black);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-copy:hover { opacity: 0.8; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      padding: 0 16px 8px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .sidebar-item:hover { color: var(--black); background: rgba(0,0,0,0.03); }
+    .sidebar-item.active { color: var(--black); font-weight: 600; border-left-color: var(--black); background: #fff; }
+
+    .sidebar-item-badge {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--border);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      overflow-y: auto;
+      padding: 40px 56px;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── FORM ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+    }
+
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--black);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 0;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus { border-color: var(--black); }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--muted); }
+
+    .form-textarea { min-height: 80px; line-height: 1.7; }
+
+    .form-hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 5px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── DIVIDER ── */
+    .form-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    .form-sub-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    /* ── PROJECT CARDS in editor ── */
+    .project-list { display: flex; flex-direction: column; gap: 0; }
+
+    .project-item {
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      background: var(--bg);
+    }
+
+    .project-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid transparent;
+      transition: background 0.15s;
+    }
+    .project-item-header:hover { background: var(--surface); }
+    .project-item.open .project-item-header { border-bottom-color: var(--border); }
+
+    .project-item-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-num {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      width: 20px;
+    }
+
+    .project-item-title {
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .project-item-cat {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .project-item-toggle {
+      font-size: 16px;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+    .project-item.open .project-item-toggle { transform: rotate(45deg); }
+
+    .project-item-body {
+      display: none;
+      padding: 24px 20px 20px;
+    }
+    .project-item.open .project-item-body { display: block; }
+
+    .project-item-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    .btn-danger {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #c0392b;
+      background: none;
+      border: 1px solid rgba(192, 57, 43, 0.3);
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-danger:hover { background: rgba(192, 57, 43, 0.06); }
+
+    .add-project-btn {
+      width: 100%;
+      padding: 12px;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .add-project-btn:hover { color: var(--black); border-color: var(--gray); }
+
+    /* ── EXPERIENCE / LINK ROWS ── */
+    .row-list { display: flex; flex-direction: column; gap: 0; }
+
+    .row-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 0 20px;
+      align-items: end;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .row-item:first-child { border-top: 1px solid var(--border); }
+
+    .row-item .form-group { margin-bottom: 0; }
+
+    .row-remove {
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 8px 0 8px 8px;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+    .row-remove:hover { color: #c0392b; }
+
+    .add-row-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .add-row-btn:hover { color: var(--black); }
+
+    /* ── TOGGLE ── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .toggle-label { font-size: 13px; font-weight: 400; }
+    .toggle-sub { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.02em; }
+
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle input:checked + .toggle-track { background: var(--black); }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 3px;
+      width: 14px; height: 14px;
+      background: white;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    /* ── IMAGE PREVIEW ── */
+    .image-preview {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .image-preview-empty {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- EXPORT MODAL -->
+<div class="modal-backdrop" id="export-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Export for GitHub Pages</span>
+      <button class="modal-close" onclick="closeExport()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-instruction">
+        GitHub Pages는 방문자 브라우저마다 localStorage가 달라서,
+        에디터 변경사항이 자동으로 배포되지 않아요.<br>
+        아래 단계로 <strong>index.html에 콘텐츠를 직접 반영</strong>한 뒤 push하세요.
+      </p>
+      <ol class="modal-steps">
+        <li>아래 코드를 전체 복사하세요 <em>(Copy 버튼)</em></li>
+        <li><code>index.html</code>을 에디터(VSCode 등)로 열고</li>
+        <li><code>const SITE_DATA = {</code> 부터 닫는 <code>};</code> 까지 선택해서 붙여넣기</li>
+        <li>저장 후 GitHub에 push → 배포 완료</li>
+      </ol>
+      <textarea class="modal-code" id="export-code" readonly></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-copy" onclick="copyExport()">Copy to Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-logo">신혜원</div>
+    <span class="topbar-title">Content Editor</span>
+    <div class="topbar-actions">
+      <span class="save-status" id="save-status"></span>
+      <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+      <a class="btn btn-ghost" href="index.html" target="_blank">View Site ↗</a>
+      <button class="btn btn-ghost" onclick="openExport()">Export for GitHub ↗</button>
+      <button class="btn btn-primary" onclick="saveAll()">Save</button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-section-label">Pages</p>
+    <div class="sidebar-item active" onclick="switchSection('hero', this)">
+      Hero
+    </div>
+    <div class="sidebar-item" onclick="switchSection('projects', this)">
+      Projects
+      <span class="sidebar-item-badge" id="badge-projects">3</span>
+    </div>
+    <div class="sidebar-divider"></div>
+    <p class="sidebar-section-label">Pages</p>
+    <div class="sidebar-item" onclick="switchSection('about', this)">About</div>
+    <div class="sidebar-item" onclick="switchSection('info', this)">Info</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ════════════════════════════════
+         HERO
+    ════════════════════════════════ -->
+    <div class="section active" id="section-hero">
+      <div class="section-header">
+        <h1 class="section-title">Hero</h1>
+        <span class="section-desc">첫 화면에 표시되는 정보</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">이름 (한국어)</label>
+          <input class="form-input" id="hero-nameKr" type="text" placeholder="신혜원" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">이름 (영어)</label>
+          <input class="form-input" id="hero-nameEn" type="text" placeholder="Shin Hyewon" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">직함</label>
+          <input class="form-input" id="hero-role" type="text" placeholder="Product Designer" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">위치</label>
+          <input class="form-input" id="hero-location" type="text" placeholder="Seoul" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">태그라인 (한국어)</label>
+        <input class="form-input" id="hero-tagline" type="text" placeholder="좋은 경험은 설명이 필요 없습니다." />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">태그라인 (영어)</label>
+        <input class="form-input" id="hero-taglineSub" type="text" placeholder="Good design needs no explanation." />
+      </div>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">Stats</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">연차</label>
+          <input class="form-input" id="hero-years" type="text" placeholder="3+" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">프로젝트 수</label>
+          <input class="form-input" id="hero-projectCount" type="text" placeholder="20+" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         PROJECTS
+    ════════════════════════════════ -->
+    <div class="section" id="section-projects">
+      <div class="section-header">
+        <h1 class="section-title">Projects</h1>
+        <span class="section-desc">홈 화면에 표시되는 프로젝트</span>
+      </div>
+
+      <div class="project-list" id="project-list"></div>
+      <button class="add-project-btn" onclick="addProject()">+ 프로젝트 추가</button>
+    </div>
+
+    <!-- ════════════════════════════════
+         ABOUT
+    ════════════════════════════════ -->
+    <div class="section" id="section-about">
+      <div class="section-header">
+        <h1 class="section-title">About</h1>
+        <span class="section-desc">About 페이지</span>
+      </div>
+
+      <p class="form-sub-title">헤드라인</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">1번째 줄</label>
+          <input class="form-input" id="about-headline1" type="text" placeholder="경험을 설계하는" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">2번째 줄</label>
+          <input class="form-input" id="about-headline2" type="text" placeholder="디자이너입니다." />
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">자기소개</p>
+
+      <div class="form-group">
+        <label class="form-label">첫 번째 단락</label>
+        <textarea class="form-textarea" id="about-bio1" placeholder="한국어 소개..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">두 번째 단락</label>
+        <textarea class="form-textarea" id="about-bio2" placeholder="한국어 소개 계속..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">영문 소개</label>
+        <textarea class="form-textarea" id="about-bio3" placeholder="English bio..."></textarea>
+      </div>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">경력</p>
+
+      <div class="row-list" id="experience-list"></div>
+      <button class="add-row-btn" onclick="addExperience()">+ 경력 추가</button>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">학력</p>
+
+      <div class="row-list" id="education-list"></div>
+      <button class="add-row-btn" onclick="addEducation()">+ 학력 추가</button>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">스킬</p>
+
+      <div class="form-group">
+        <label class="form-label">스킬 목록</label>
+        <input class="form-input" id="about-skills" type="text" placeholder="Figma, Framer, After Effects, ..." />
+        <p class="form-hint">쉼표(,)로 구분</p>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         INFO
+    ════════════════════════════════ -->
+    <div class="section" id="section-info">
+      <div class="section-header">
+        <h1 class="section-title">Info</h1>
+        <span class="section-desc">연락처 및 링크</span>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Available for new projects</div>
+          <div class="toggle-sub">초록 점과 함께 표시됩니다</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="info-available" />
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">이메일</label>
+        <input class="form-input" id="info-email" type="email" placeholder="your@email.com" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">메모 (이메일 하단 설명)</label>
+        <textarea class="form-textarea" id="info-note" placeholder="업무 문의 및 협업 제안을 환영합니다."></textarea>
+      </div>
+
+      <div class="form-divider"></div>
+      <p class="form-sub-title">링크</p>
+
+      <div class="row-list" id="links-list"></div>
+      <button class="add-row-btn" onclick="addLink()">+ 링크 추가</button>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+// DEFAULT DATA
+// ────────────────────────────────────────────────
+const STORAGE_KEY = 'portfolio-data';
+
+const DEFAULTS = {
+  hero: {
+    nameKr: '신혜원',
+    nameEn: 'Shin Hyewon',
+    role: 'Product Designer',
+    location: 'Seoul',
+    tagline: '좋은 경험은 설명이 필요 없습니다.',
+    taglineSub: 'Good design needs no explanation.',
+    years: '3+',
+    projectCount: '20+'
+  },
+  projects: [
+    { category: 'Digital Product', title: '프로젝트 이름을 입력하세요', year: '2024', tags: 'UX Design, Prototyping, Figma', image: '' },
+    { category: 'Brand Experience', title: '프로젝트 이름을 입력하세요', year: '2024', tags: 'Visual Design, Branding', image: '' },
+    { category: 'Mobile App',       title: '프로젝트 이름을 입력하세요', year: '2023', tags: 'UI Design, User Research', image: '' }
+  ],
+  about: {
+    headline1: '경험을 설계하는',
+    headline2: '디자이너입니다.',
+    bio1: '안녕하세요, 사용자 경험과 인터페이스 디자인을 중심으로 활동하는 프로덕트 디자이너 신혜원입니다.',
+    bio2: '복잡한 문제를 단순하고 직관적인 경험으로 풀어내는 것에 가장 큰 보람을 느낍니다. 사용자의 행동과 맥락을 깊이 이해하고, 그것을 디자인 언어로 옮기는 과정을 즐깁니다.',
+    bio3: "I'm a product designer based in Seoul, focused on crafting simple and meaningful digital experiences.",
+    experience: [
+      { name: '회사명', period: '2023 — Present' },
+      { name: '회사명', period: '2021 — 2023' },
+      { name: '회사명', period: '2019 — 2021' }
+    ],
+    education: [
+      { name: '학교명', period: '20XX — 20XX' }
+    ],
+    skills: 'Figma, Framer, After Effects, Prototyping, Design System, User Research'
+  },
+  info: {
+    email: 'hyewon.shin01@gmail.com',
+    note: '업무 문의 및 협업 제안을 환영합니다.\nOpen to full-time and freelance work.',
+    available: true,
+    links: [
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/hyezzz/' }
+    ]
+  }
+};
+
+// ────────────────────────────────────────────────
+// LOAD / SAVE
+// ────────────────────────────────────────────────
+function loadData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULTS));
+}
+
+function saveAll() {
+  const data = collectData();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const el = document.getElementById('save-status');
+  el.textContent = 'Saved';
+  setTimeout(() => { el.textContent = ''; }, 2000);
+}
+
+function resetAll() {
+  if (!confirm('모든 내용을 기본값으로 초기화할까요?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  populateForms(JSON.parse(JSON.stringify(DEFAULTS)));
+}
+
+// ────────────────────────────────────────────────
+// COLLECT DATA FROM FORM
+// ────────────────────────────────────────────────
+function collectData() {
+  // Hero
+  const hero = {
+    nameKr:       val('hero-nameKr'),
+    nameEn:       val('hero-nameEn'),
+    role:         val('hero-role'),
+    location:     val('hero-location'),
+    tagline:      val('hero-tagline'),
+    taglineSub:   val('hero-taglineSub'),
+    years:        val('hero-years'),
+    projectCount: val('hero-projectCount')
+  };
+
+  // Projects
+  const projects = [];
+  document.querySelectorAll('#project-list .project-item').forEach((item, i) => {
+    projects.push({
+      category: item.querySelector('[data-field="category"]').value,
+      title:    item.querySelector('[data-field="title"]').value,
+      year:     item.querySelector('[data-field="year"]').value,
+      tags:     item.querySelector('[data-field="tags"]').value,
+      image:    item.querySelector('[data-field="image"]').value
+    });
+  });
+
+  // About experience
+  const experience = [];
+  document.querySelectorAll('#experience-list .row-item').forEach(row => {
+    experience.push({
+      name:   row.querySelector('[data-field="name"]').value,
+      period: row.querySelector('[data-field="period"]').value
+    });
+  });
+
+  // About education
+  const education = [];
+  document.querySelectorAll('#education-list .row-item').forEach(row => {
+    education.push({
+      name:   row.querySelector('[data-field="name"]').value,
+      period: row.querySelector('[data-field="period"]').value
+    });
+  });
+
+  const about = {
+    headline1: val('about-headline1'),
+    headline2: val('about-headline2'),
+    bio1:      val('about-bio1'),
+    bio2:      val('about-bio2'),
+    bio3:      val('about-bio3'),
+    experience,
+    education,
+    skills:    val('about-skills')
+  };
+
+  // Info links
+  const links = [];
+  document.querySelectorAll('#links-list .row-item').forEach(row => {
+    links.push({
+      label: row.querySelector('[data-field="label"]').value,
+      url:   row.querySelector('[data-field="url"]').value
+    });
+  });
+
+  const info = {
+    email:     val('info-email'),
+    note:      val('info-note'),
+    available: document.getElementById('info-available').checked,
+    links
+  };
+
+  return { hero, projects, about, info };
+}
+
+function val(id) {
+  return document.getElementById(id).value;
+}
+
+// ────────────────────────────────────────────────
+// POPULATE FORMS FROM DATA
+// ────────────────────────────────────────────────
+function populateForms(data) {
+  // Hero
+  setVal('hero-nameKr',       data.hero.nameKr);
+  setVal('hero-nameEn',       data.hero.nameEn);
+  setVal('hero-role',         data.hero.role);
+  setVal('hero-location',     data.hero.location);
+  setVal('hero-tagline',      data.hero.tagline);
+  setVal('hero-taglineSub',   data.hero.taglineSub);
+  setVal('hero-years',        data.hero.years);
+  setVal('hero-projectCount', data.hero.projectCount);
+
+  // Projects
+  const list = document.getElementById('project-list');
+  list.innerHTML = '';
+  data.projects.forEach((p, i) => appendProjectItem(p, i));
+  updateProjectBadge();
+
+  // About
+  setVal('about-headline1', data.about.headline1);
+  setVal('about-headline2', data.about.headline2);
+  setVal('about-bio1',      data.about.bio1);
+  setVal('about-bio2',      data.about.bio2);
+  setVal('about-bio3',      data.about.bio3);
+  setVal('about-skills',    data.about.skills);
+
+  const expList = document.getElementById('experience-list');
+  expList.innerHTML = '';
+  data.about.experience.forEach(e => appendRowItem(expList, e.name, e.period, 'name', 'period', '회사명', '기간'));
+
+  const eduList = document.getElementById('education-list');
+  eduList.innerHTML = '';
+  data.about.education.forEach(e => appendRowItem(eduList, e.name, e.period, 'name', 'period', '학교명', '기간'));
+
+  // Info
+  setVal('info-email', data.info.email);
+  setVal('info-note',  data.info.note);
+  document.getElementById('info-available').checked = data.info.available;
+
+  const linksList = document.getElementById('links-list');
+  linksList.innerHTML = '';
+  data.info.links.forEach(l => appendRowItem(linksList, l.label, l.url, 'label', 'url', '서비스명 (예: LinkedIn)', 'URL'));
+}
+
+function setVal(id, value) {
+  document.getElementById(id).value = value || '';
+}
+
+// ────────────────────────────────────────────────
+// PROJECT ITEMS
+// ────────────────────────────────────────────────
+function appendProjectItem(p, index) {
+  const list = document.getElementById('project-list');
+  const item = document.createElement('div');
+  item.className = 'project-item';
+  item.innerHTML = `
+    <div class="project-item-header" onclick="toggleProject(this)">
+      <div class="project-item-label">
+        <span class="project-num">0${index + 1}</span>
+        <span class="project-item-title">${p.title || '새 프로젝트'}</span>
+        <span class="project-item-cat">${p.category || ''}</span>
+      </div>
+      <span class="project-item-toggle">+</span>
+    </div>
+    <div class="project-item-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">카테고리</label>
+          <input class="form-input" data-field="category" type="text" value="${p.category || ''}" placeholder="Digital Product" oninput="syncProjectLabel(this)" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">연도</label>
+          <input class="form-input" data-field="year" type="text" value="${p.year || ''}" placeholder="2024" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">프로젝트 이름</label>
+        <input class="form-input" data-field="title" type="text" value="${p.title || ''}" placeholder="프로젝트 이름" oninput="syncProjectLabel(this)" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">태그</label>
+        <input class="form-input" data-field="tags" type="text" value="${p.tags || ''}" placeholder="UX Design, Prototyping, Figma" />
+        <p class="form-hint">쉼표(,)로 구분</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">이미지 URL</label>
+        <input class="form-input" data-field="image" type="text" value="${p.image || ''}" placeholder="https://... 또는 assets/project1.jpg" oninput="previewImage(this)" />
+        <div class="image-preview" id="preview-${Date.now()}">
+          ${p.image ? `<img src="${p.image}" onerror="this.parentElement.innerHTML='<span class=\\'image-preview-empty\\'>이미지를 불러올 수 없습니다</span>'" />` : '<span class="image-preview-empty">이미지 없음</span>'}
+        </div>
+      </div>
+      <div class="project-item-actions">
+        <button class="btn-danger" onclick="removeProject(this)">프로젝트 삭제</button>
+      </div>
+    </div>
+  `;
+  list.appendChild(item);
+}
+
+function toggleProject(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function syncProjectLabel(input) {
+  const item = input.closest('.project-item');
+  const title    = item.querySelector('[data-field="title"]').value;
+  const category = item.querySelector('[data-field="category"]').value;
+  item.querySelector('.project-item-title').textContent = title || '새 프로젝트';
+  item.querySelector('.project-item-cat').textContent   = category || '';
+}
+
+function previewImage(input) {
+  const preview = input.parentElement.querySelector('.image-preview');
+  if (input.value) {
+    preview.innerHTML = `<img src="${input.value}" onerror="this.parentElement.innerHTML='<span class=\\'image-preview-empty\\'>이미지를 불러올 수 없습니다</span>'" />`;
+  } else {
+    preview.innerHTML = '<span class="image-preview-empty">이미지 없음</span>';
+  }
+}
+
+function addProject() {
+  const index = document.querySelectorAll('#project-list .project-item').length;
+  appendProjectItem({ category: '', title: '', year: new Date().getFullYear().toString(), tags: '', image: '' }, index);
+  updateProjectBadge();
+  // auto-open
+  const items = document.querySelectorAll('#project-list .project-item');
+  items[items.length - 1].classList.add('open');
+}
+
+function removeProject(btn) {
+  if (!confirm('이 프로젝트를 삭제할까요?')) return;
+  btn.closest('.project-item').remove();
+  updateProjectBadge();
+  // renumber
+  document.querySelectorAll('#project-list .project-item .project-num').forEach((el, i) => {
+    el.textContent = `0${i + 1}`;
+  });
+}
+
+function updateProjectBadge() {
+  const count = document.querySelectorAll('#project-list .project-item').length;
+  document.getElementById('badge-projects').textContent = count;
+}
+
+// ────────────────────────────────────────────────
+// GENERIC ROW ITEMS (experience, education, links)
+// ────────────────────────────────────────────────
+function appendRowItem(container, val1, val2, field1, field2, ph1, ph2) {
+  const row = document.createElement('div');
+  row.className = 'row-item';
+  row.innerHTML = `
+    <div class="form-group">
+      <input class="form-input" data-field="${field1}" type="text" value="${val1 || ''}" placeholder="${ph1}" />
+    </div>
+    <div class="form-group">
+      <input class="form-input" data-field="${field2}" type="text" value="${val2 || ''}" placeholder="${ph2}" />
+    </div>
+    <button class="row-remove" onclick="this.closest('.row-item').remove()">×</button>
+  `;
+  container.appendChild(row);
+}
+
+function addExperience() {
+  appendRowItem(document.getElementById('experience-list'), '', '', 'name', 'period', '회사명', '2020 — 2022');
+}
+function addEducation() {
+  appendRowItem(document.getElementById('education-list'), '', '', 'name', 'period', '학교명', '20XX — 20XX');
+}
+function addLink() {
+  appendRowItem(document.getElementById('links-list'), '', '', 'label', 'url', '서비스명', 'https://...');
+}
+
+// ────────────────────────────────────────────────
+// SECTION NAVIGATION
+// ────────────────────────────────────────────────
+function switchSection(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ────────────────────────────────────────────────
+// EXPORT FOR GITHUB
+// ────────────────────────────────────────────────
+function openExport() {
+  const data = collectData();
+  const json = JSON.stringify(data, null, 2);
+  const code = `const SITE_DATA = ${json};`;
+  document.getElementById('export-code').value = code;
+  document.getElementById('export-modal').classList.add('open');
+}
+
+function closeExport() {
+  document.getElementById('export-modal').classList.remove('open');
+}
+
+function copyExport() {
+  const ta = document.getElementById('export-code');
+  ta.select();
+  document.execCommand('copy');
+  const btn = document.querySelector('.btn-copy');
+  btn.textContent = 'Copied ✓';
+  setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+}
+
+document.getElementById('export-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeExport();
+});
+
+// ────────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────────
+populateForms(loadData());
+
+// Keyboard shortcut: Cmd/Ctrl + S to save
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+    e.preventDefault();
+    saveAll();
+  }
+});
+</script>
+
+</body>
+</html>
