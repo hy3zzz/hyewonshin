@@ -4,8 +4,8 @@
 :root {
   --bg:        #ffffff;
   --black:     #0f0f0f;
-  --gray:      #888888;
-  --muted:     #bbbbbb;
+  --gray:      #555555;
+  --muted:     #999999;
   --line:      #ebebeb;
   --spine:     #d8d8d8;
   --white:     #ffffff;
@@ -177,7 +177,7 @@ nav {
 }
 
 .display-name {
-  font-size: clamp(72px, 11vw, 148px);
+  font-size: clamp(48px, 7vw, 96px);
   font-weight: 200;
   letter-spacing: -0.04em;
   line-height: 0.92;
@@ -188,7 +188,7 @@ nav {
 
 .display-name .en {
   display: block;
-  font-size: clamp(40px, 6.5vw, 88px);
+  font-size: clamp(28px, 4.2vw, 58px);
   font-weight: 200;
   color: var(--muted);
   letter-spacing: -0.03em;
@@ -204,14 +204,14 @@ nav {
 }
 
 .hero-tagline {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 300;
-  line-height: 1.75;
+  line-height: 1.65;
   color: var(--black);
 }
 
 .hero-tagline-sub {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.02em;
   color: var(--muted);
@@ -259,20 +259,19 @@ nav {
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--gray);
-  border: 1px solid var(--line);
+  color: var(--white);
+  border: 1px solid var(--black);
   padding: 9px 16px;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition: opacity 0.2s var(--ease);
   cursor: pointer;
-  background: none;
+  background: var(--black);
   text-decoration: none;
 }
 .btn-pdf:hover {
-  color: var(--black);
-  border-color: var(--black);
+  opacity: 0.75;
 }
 .btn-pdf svg {
-  opacity: 0.5;
+  opacity: 0.8;
   transition: opacity 0.2s;
 }
 .btn-pdf:hover svg { opacity: 1; }
@@ -384,9 +383,9 @@ nav {
 
 .project-title {
   font-size: 17px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--black);
   margin-bottom: 16px;
   transition: color 0.2s;
@@ -465,7 +464,7 @@ footer > div:first-child {
 
 .page-headline {
   font-size: clamp(32px, 5vw, 60px);
-  font-weight: 200;
+  font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 1.12;
   color: var(--black);
@@ -485,9 +484,9 @@ footer > div:first-child {
 }
 
 .about-bio p {
-  font-size: 15px;
-  font-weight: 300;
-  line-height: 1.95;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.8;
   color: var(--black);
   margin-bottom: 24px;
 }
@@ -496,6 +495,34 @@ footer > div:first-child {
   font-size: 13px;
   font-weight: 400;
   color: var(--gray);
+}
+
+.about-values {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.about-value {
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+}
+
+.about-value-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.about-value-desc {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--gray);
+  margin-bottom: 0;
 }
 
 .about-sidebar {
@@ -531,9 +558,12 @@ footer > div:first-child {
 .exp-row:last-child { border-bottom: 1px solid var(--line); }
 
 .exp-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
   color: var(--black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .exp-period {
@@ -782,7 +812,7 @@ footer > div:first-child {
 
 .cs-title {
   font-size: clamp(24px, 3.5vw, 44px);
-  font-weight: 200;
+  font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 1.2;
   color: var(--black);
@@ -808,15 +838,19 @@ footer > div:first-child {
 
 .cs-meta-val {
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--black);
   line-height: 1.6;
 }
 
 .cs-section {
+  display: block;
+  border-bottom: 1px solid var(--line);
+}
+
+.cs-section-inner {
   display: grid;
   grid-template-columns: var(--col-label) 1fr;
-  border-bottom: 1px solid var(--line);
 }
 
 .cs-section-label {
@@ -845,17 +879,17 @@ footer > div:first-child {
 
 .cs-section-title {
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--black);
   margin-bottom: 20px;
 }
 
 .cs-section-body {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.95;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.9;
   color: var(--gray);
   max-width: 600px;
 }
@@ -917,14 +951,72 @@ footer > div:first-child {
   padding-top: 2px;
 }
 
-/* Case study slide image */
+/* Case study cover image */
+.cs-cover-wrap {
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  max-height: 520px;
+}
+
+.cs-cover-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Full-width standalone image/video section */
+.cs-full-section {
+  border-bottom: 1px solid var(--line);
+}
+
+.cs-full-media {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Pagination */
+.cs-pagination {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--line);
+}
+
+.cs-pagination-item {
+  padding: 40px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.cs-pagination-item:hover { background: #f7f7f7; }
+.cs-pagination-item.cs-pagination-empty { cursor: default; }
+.cs-pagination-item.cs-pagination-empty:hover { background: transparent; }
+.cs-pagination-next { border-left: 1px solid var(--line); text-align: right; }
+
+.cs-pagination-label {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cs-pagination-title {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--black);
+}
+
+/* Case study slide image — natural height, no crop, no border */
 .cs-slide-img {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  height: auto;
   display: block;
-  border: 1px solid var(--line);
-  margin-top: 36px;
 }
 
 .cs-quote {
@@ -961,7 +1053,7 @@ footer > div:first-child {
 
   .g-3, .project-row, .projects-header,
   .about-body, .info-body { grid-template-columns: 1fr; }
-  .cs-hero, .cs-section { grid-template-columns: 1fr; }
+  .cs-hero, .cs-section-inner { grid-template-columns: 1fr; }
   .cs-nav { grid-template-columns: auto 1fr auto; }
 
   .hero-name-cell { padding: 40px 28px 36px; }
@@ -973,5 +1065,6 @@ footer > div:first-child {
   .info-cell { padding: 40px 28px; }
   .info-header .about-header-content { padding: 40px 28px; }
   .cs-hero-content, .cs-section-content { padding: 40px 28px; }
+  .cs-pagination-item { padding: 32px 28px; }
   .project-row-cell:first-of-type { border-right: none; }
 }
